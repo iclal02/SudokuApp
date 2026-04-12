@@ -1,4 +1,3 @@
-
 //
 //  CompletedGameView.swift
 //  sudoku
@@ -10,6 +9,9 @@ import SwiftUI
 
 struct CompletedGameView: View {
     let game: RecentGame
+    let mistakes: Int
+    let totalScore: Int
+    let board: [[String]]
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -36,14 +38,6 @@ struct CompletedGameView: View {
                 .foregroundStyle(Color(red: 24/255, green: 29/255, blue: 35/255))
 
             Spacer()
-
-            Button {
-                print("sonucu paylaş butonu tıklandı")
-            } label: {
-                Image(systemName: "square.and.arrow.up")
-                    .font(.system(size: 21, weight: .medium))
-                    .foregroundStyle(Color(red: 85/255, green: 107/255, blue: 47/255))
-            }
         }
         .padding(.top, 6)
     }
@@ -89,7 +83,7 @@ struct CompletedGameView: View {
                     .font(.system(size: 14, weight: .bold))
                     .foregroundStyle(Color(red: 136/255, green: 160/255, blue: 112/255))
 
-                Text("1250")
+                Text("\(totalScore)")
                     .font(.system(size: 34, weight: .heavy))
                     .foregroundStyle(Color(red: 85/255, green: 107/255, blue: 47/255))
             }
@@ -109,6 +103,7 @@ struct CompletedGameView: View {
         HStack(spacing: 14) {
             statCard(icon: "timer", title: "SÜRE", value: game.duration)
             statCard(icon: "bolt", title: "ZORLUK", value: formattedDifficulty)
+            statCard(icon: "xmark.circle", title: "HATA", value: "\(mistakes)")
         }
     }
 
@@ -131,6 +126,8 @@ struct CompletedGameView: View {
                 Text(value)
                     .font(.system(size: 18, weight: .bold))
                     .foregroundStyle(Color(red: 24/255, green: 29/255, blue: 35/255))
+                    .minimumScaleFactor(0.8)
+                    .lineLimit(1)
             }
         }
         .frame(maxWidth: .infinity)
@@ -160,7 +157,7 @@ struct CompletedGameView: View {
                                             .stroke(Color(red: 223/255, green: 229/255, blue: 215/255), lineWidth: 0.5)
                                     )
 
-                                Text(sampleBoard[row][column])
+                                Text(board[row][column])
                                     .font(.system(size: 12, weight: .semibold))
                                     .foregroundStyle(numberColor(forRow: row, column: column))
                             }
@@ -242,18 +239,6 @@ struct CompletedGameView: View {
         game.title.replacingOccurrences(of: " SUDOKU", with: "").capitalized
     }
 
-    private let sampleBoard: [[String]] = [
-        ["2", "1", "4", "6", "9", "2", "1", "8", "5"],
-        ["2", "1", "3", "6", "2", "8", "9", "2", "8"],
-        ["4", "5", "2", "2", "1", "8", "4", "4", "7"],
-        ["9", "4", "9", "7", "5", "4", "3", "2", "3"],
-        ["7", "8", "1", "3", "6", "3", "2", "8", "5"],
-        ["8", "3", "4", "3", "6", "3", "9", "6", "1"],
-        ["6", "1", "9", "6", "6", "8", "3", "3", "9"],
-        ["2", "1", "7", "8", "9", "9", "1", "9", "6"],
-        ["3", "4", "6", "4", "3", "6", "8", "3", "4"]
-    ]
-
     private func numberColor(forRow row: Int, column: Int) -> Color {
         let greenPositions: Set<String> = [
             "0-0", "0-2", "0-6", "0-7",
@@ -279,9 +264,21 @@ struct CompletedGameView: View {
             title: "ZOR SUDOKU",
             duration: "12:40",
             dateText: "Bugün",
-            progressText: "%100",
             progressValue: 1.0,
             isCompleted: true
-        )
+        ),
+        mistakes: 1,
+        totalScore: 1250,
+        board: [
+            ["5", "3", "4", "6", "7", "8", "9", "1", "2"],
+            ["6", "7", "2", "1", "9", "5", "3", "4", "8"],
+            ["1", "9", "8", "3", "4", "2", "5", "6", "7"],
+            ["8", "5", "9", "7", "6", "1", "4", "2", "3"],
+            ["4", "2", "6", "8", "5", "3", "7", "9", "1"],
+            ["7", "1", "3", "9", "2", "4", "8", "5", "6"],
+            ["9", "6", "1", "5", "3", "7", "2", "8", "4"],
+            ["2", "8", "7", "4", "1", "9", "6", "3", "5"],
+            ["3", "4", "5", "2", "8", "6", "1", "7", "9"]
+        ]
     )
 }

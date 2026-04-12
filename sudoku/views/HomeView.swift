@@ -10,34 +10,15 @@ import UIKit
 
 struct HomeView: View {
     
-    @State private var username = "ico krhsr"  // state demek değişken değişirse ekranı yeniden çiz
-    @State private var score = 1250
-    @State private var wins = 43
-    @State private var totalTime = "18saat"
-    
-    @State private var selectedDifficulty = "ORTA"
+   // state demek değişken değişirse ekranı yeniden çiz
+
+    @State private var selectedDifficulty: Difficulty = .medium
     
     @State private var showGameView = false // game ekranı açık mı?
     @State private var showRecentGames = false
     
-    private let recentGames = [
-        RecentGame(
-            title: "ZOR SUDOKU",
-            duration: "12:40",
-            dateText: "Bugün",
-            progressText: "%45",
-            progressValue: 0.45,
-            isCompleted: false
-        ),
-        RecentGame(
-            title: "ORTA SUDOKU",
-            duration: "08:15",
-            dateText: "Dün",
-            progressText: "%80",
-            progressValue: 0.80,
-            isCompleted: true
-        )
-    ]
+    @State private var playerStats = HomeMockData.playerStats
+    private let recentGames = HomeMockData.recentGames
     
     var body: some View {
         
@@ -75,7 +56,7 @@ struct HomeView: View {
                                     .italic(true)
                                     .padding(.leading,0)
                                     .foregroundColor(Color(red: 164/255, green: 164/255, blue: 164/255))
-                                Text(username)
+                                Text(playerStats.username)
                                     .font(.title)
                                     .bold()
                                 
@@ -88,7 +69,7 @@ struct HomeView: View {
                                 Text("PUAN")
                                     .font(.subheadline)
                                     .foregroundColor(Color(red: 75/255, green: 83/255, blue: 32/255))
-                                Text("\(score)")
+                                Text("\(playerStats.score)")
                                     .font(.system(size:35))
                                     .bold()
                                     .foregroundColor(Color(red: 85/255, green: 107/255, blue: 47/255))
@@ -131,25 +112,25 @@ struct HomeView: View {
                                 .italic()
                         }
                         .frame(width: 115, height: 100)
-                        .foregroundStyle(selectedDifficulty == "KOLAY" ? Color(red: 85/255, green: 107/255, blue: 47/255) : Color(red: 58/255, green: 58/255, blue: 58/255)) // yazının rengi
+                        .foregroundStyle(selectedDifficulty == .easy ? Color(red: 85/255, green: 107/255, blue: 47/255) : Color(red: 58/255, green: 58/255, blue: 58/255)) // yazının rengi
                         .background(
                             RoundedRectangle(cornerRadius: 10) // ekrana dikdörtgen çizer
-                                .fill(selectedDifficulty == "KOLAY" ? Color.white : Color.clear) // içini doldurur
-                                .shadow(color: .black.opacity(selectedDifficulty == "KOLAY" ? 0.5 : 0), radius: 6, x: 0, y: 4) // gölge ekler
+                                .fill(selectedDifficulty == .easy ? Color.white : Color.clear) // içini doldurur
+                                .shadow(color: .black.opacity(selectedDifficulty == .easy ? 0.5 : 0), radius: 6, x: 0, y: 4) // gölge ekler
                         )
                         .overlay( // view üstüne başka bir view koy demek katman gibi
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke( // kenarlık çizer
-                                    selectedDifficulty == "KOLAY"
+                                    selectedDifficulty == .easy
                                     ? Color(red: 85/255, green: 107/255, blue: 47/255)
                                     : Color.gray.opacity(0.7),
-                                    style: selectedDifficulty == "KOLAY"
+                                    style: selectedDifficulty == .easy
                                     ? StrokeStyle(lineWidth: 2)
                                     : StrokeStyle(lineWidth: 2, dash: [6]) // çizgi kalınlığı 2px, dash kesikli çizgi ekledik
                                        )
                         )
                         .onTapGesture { // buraya tıklandığında bu kod çalışsın demek
-                            selectedDifficulty = "KOLAY"
+                            selectedDifficulty = .easy
                         }
                         
                         // ORTA
@@ -159,26 +140,26 @@ struct HomeView: View {
                                 .font(.system(size: 17))
                                 .italic()
                         }
-                        .foregroundStyle(selectedDifficulty == "ORTA" ? Color(red: 85/255, green: 107/255, blue: 47/255) : Color(red: 58/255, green: 58/255, blue: 58/255))
+                        .foregroundStyle(selectedDifficulty == .medium ? Color(red: 85/255, green: 107/255, blue: 47/255) : Color(red: 58/255, green: 58/255, blue: 58/255))
                         .frame(width: 115, height: 100)
                         .background(
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(selectedDifficulty == "ORTA" ? Color.white : Color.clear)
-                                .shadow(color: .black.opacity(selectedDifficulty == "ORTA" ? 0.5 : 0), radius: 6, x: 0, y: 4)
+                                .fill(selectedDifficulty == .medium ? Color.white : Color.clear)
+                                .shadow(color: .black.opacity(selectedDifficulty == .medium ? 0.5 : 0), radius: 6, x: 0, y: 4)
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(
-                                    selectedDifficulty == "ORTA"
+                                    selectedDifficulty == .medium
                                     ? Color(red: 85/255, green: 107/255, blue: 47/255)
                                     : Color.gray.opacity(0.7),
-                                    style: selectedDifficulty == "ORTA"
+                                    style: selectedDifficulty == .medium
                                     ? StrokeStyle(lineWidth: 2)
                                     : StrokeStyle(lineWidth: 2, dash: [6])
                                 )
                         )
                         .onTapGesture {
-                            selectedDifficulty = "ORTA"
+                            selectedDifficulty = .medium
                         }
                         
                         // ZOR
@@ -189,25 +170,25 @@ struct HomeView: View {
                                 .italic()
                         }
                         .frame(width: 115, height: 100)
-                        .foregroundStyle(selectedDifficulty == "ZOR" ? Color(red: 85/255, green: 107/255, blue: 47/255) : Color(red: 58/255, green: 58/255, blue: 58/255))
+                        .foregroundStyle(selectedDifficulty == .hard ? Color(red: 85/255, green: 107/255, blue: 47/255) : Color(red: 58/255, green: 58/255, blue: 58/255))
                         .background(
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(selectedDifficulty == "ZOR" ? Color.white : Color.clear)
-                                .shadow(color: .black.opacity(selectedDifficulty == "ZOR" ? 0.5 : 0), radius: 6, x: 0, y: 4)
+                                .fill(selectedDifficulty == .hard ? Color.white : Color.clear)
+                                .shadow(color: .black.opacity(selectedDifficulty == .hard ? 0.5 : 0), radius: 6, x: 0, y: 4)
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(
-                                    selectedDifficulty == "ZOR"
+                                    selectedDifficulty == .hard
                                     ? Color(red: 85/255, green: 107/255, blue: 47/255)
                                     : Color.gray.opacity(0.7),
-                                    style: selectedDifficulty == "ZOR"
+                                    style: selectedDifficulty == .hard
                                     ? StrokeStyle(lineWidth: 2)
                                     : StrokeStyle(lineWidth: 2, dash: [6])
                                 )
                         )
                         .onTapGesture {
-                            selectedDifficulty = "ZOR"
+                            selectedDifficulty = .hard
                         }
                     }
                     
@@ -242,7 +223,7 @@ struct HomeView: View {
                                     .font(.system(size:17, weight: .regular))
                             }.foregroundStyle(Color(red: 113/255, green: 113/255, blue: 113/255))
                             
-                            Text("\(wins)")
+                            Text("\(playerStats.wins)")
                                 .bold()
                                 .font(.system(size: 24))
                                 .padding(.top, 6)
@@ -266,7 +247,7 @@ struct HomeView: View {
                                     .font(.system(size:17, weight: .regular))
                             }.foregroundStyle(Color(red: 133/255, green: 133/255, blue: 133/255))
                             
-                            Text(totalTime)
+                            Text(playerStats.totalTime)
                                 .bold()
                                 .font(.system(size: 24))
                                 .padding(.top, 6)
@@ -311,7 +292,7 @@ struct HomeView: View {
             }
         }
         .fullScreenCover(isPresented: $showGameView) { // eğer showGameView = true ise GameView ekranını aç
-            GameView(difficulty: selectedDifficulty) // ekran açıldığında bu değeri de gönder
+            GameView(difficulty: Difficulty(rawValue: selectedDifficulty.rawValue) ?? .medium) // ekran açıldığında bu değeri de gönder
         }
         .sheet(isPresented: $showRecentGames){
             RecentGameView(games: recentGames)

@@ -35,7 +35,6 @@ struct RecentGameView: View {
             title: "ZOR SUDOKU",
             duration: "12:40",
             dateText: "Bugün",
-            progressText: "%45",
             progressValue: 0.45,
             isCompleted: false
         )
